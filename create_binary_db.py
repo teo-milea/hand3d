@@ -31,7 +31,7 @@ import imageio as img
 import struct
 
 # SET THIS to where RHD is located on your machine
-path_to_db = './data/RHD_published_v2/'
+path_to_db = '../../data/handpose_dataset/RHD_published_v2/'
 
 # chose if you want to create a binary for training or evaluation set
 set = 'training'
