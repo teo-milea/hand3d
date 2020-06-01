@@ -16,8 +16,9 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 from __future__ import print_function, unicode_literals
-
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
+import tensorflow
+tf.disable_v2_behavior()
 import os
 
 from utils.general import *
@@ -139,7 +140,7 @@ class ColorHandPose3DNetwork(object):
             Outputs:
                 scoremap_list_large: list of [B, 256, 256, 2] tf.float32 tensor, Scores for the hand segmentation classes
         """
-        with tf.variable_scope('HandSegNet'):
+        with tensorflow.compat.v1.variable_scope('HandSegNet'):
             scoremap_list = list()
             layers_per_block = [2, 2, 4, 4]
             out_chan_list = [64, 128, 256, 512]
@@ -163,7 +164,7 @@ class ColorHandPose3DNetwork(object):
 
             # upsample to full size
             s = image.get_shape().as_list()
-            scoremap_list_large = [tf.image.resize_images(x, (s[1], s[2])) for x in scoremap_list]
+            scoremap_list_large = [tensorflow.image.resize(x, (s[1], s[2])) for x in scoremap_list]
 
         return scoremap_list_large
 
@@ -178,7 +179,7 @@ class ColorHandPose3DNetwork(object):
             Outputs:
                 scoremap_list_large: list of [B, 256, 256, 21] tf.float32 tensor, Scores for the hand keypoints
         """
-        with tf.variable_scope('PoseNet2D'):
+        with tf.compat.v1.variable_scope('PoseNet2D'):
             scoremap_list = list()
             layers_per_block = [2, 2, 4, 2]
             out_chan_list = [64, 128, 256, 512]
@@ -248,7 +249,7 @@ class ColorHandPose3DNetwork(object):
 
     def _inference_pose3d_can(self, keypoints_scoremap, hand_side, evaluation, train=False):
         """ Inference of canonical coordinates. """
-        with tf.variable_scope('PosePrior'):
+        with tf.compat.v1.variable_scope('PosePrior'):
             # use encoding to detect relative, normed 3d coords
             x = keypoints_scoremap  # this is 28x28x21
             s = x.get_shape().as_list()

@@ -17,7 +17,8 @@
 #
 from __future__ import print_function, unicode_literals
 
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
+import tensorflow
 from tensorflow.python import pywrap_tensorflow
 import numpy as np
 import math
@@ -42,7 +43,7 @@ class NetworkOps(object):
 
             # conv
             kernel = tf.get_variable('weights', kernel_shape, tf.float32,
-                                     tf.contrib.layers.xavier_initializer_conv2d(), trainable=trainable, collections=['wd', 'variables', 'filters'])
+                                     tensorflow.keras.initializers.GlorotNormal, trainable=trainable, collections=['wd', 'variables', 'filters'])
             tmp_result = tf.nn.conv2d(in_tensor, kernel, strides, padding='SAME')
 
             # bias
@@ -118,7 +119,7 @@ class NetworkOps(object):
 
             # weight matrix
             weights = tf.get_variable('weights', weights_shape, tf.float32,
-                                     tf.contrib.layers.xavier_initializer(), trainable=trainable)
+                                     tensorflow.keras.initializers.GlorotNormal, trainable=trainable)
             weights = tf.check_numerics(weights, 'weights: %s' % layer_name)
 
             # bias

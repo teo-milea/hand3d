@@ -27,15 +27,15 @@ from __future__ import print_function, unicode_literals
 
 import pickle
 import os
-import scipy.misc
+import imageio as img
 import struct
 
 # SET THIS to where RHD is located on your machine
-path_to_db = './RHD_published_v2/'
+path_to_db = './data/RHD_published_v2/'
 
 # chose if you want to create a binary for training or evaluation set
-# set = 'training'
-set = 'evaluation'
+set = 'training'
+# set = 'evaluation'
 
 ### No more changes below this line ###
 
@@ -88,7 +88,7 @@ def write_to_binary(file_handle, image, mask, kp_coord_xyz, kp_coord_uv, kp_visi
 
     # print('bytes_written', bytes_written)
 
-# binary file we will write
+# binary file where we will write
 file_name_out = './data/bin/rhd_%s.bin' % set
 
 if not os.path.exists('./data/bin'):
@@ -103,8 +103,8 @@ with open(file_name_out, 'wb') as fo:
     num_samples = len(anno_all.items())
     for sample_id, anno in anno_all.items():
         # load data
-        image = scipy.misc.imread(os.path.join(path_to_db, set, 'color', '%.5d.png' % sample_id))
-        mask = scipy.misc.imread(os.path.join(path_to_db, set, 'mask', '%.5d.png' % sample_id))
+        image = img.imread(os.path.join(path_to_db, set, 'color', '%.5d.png' % sample_id))
+        mask = img.imread(os.path.join(path_to_db, set, 'mask', '%.5d.png' % sample_id))
 
         # get info from annotation dictionary
         kp_coord_uv = anno['uv_vis'][:, :2]  # u, v coordinates of 42 hand keypoints, pixel

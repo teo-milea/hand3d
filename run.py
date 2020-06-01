@@ -17,11 +17,13 @@
 #
 from __future__ import print_function, unicode_literals
 
-import tensorflow as tf
+
 import numpy as np
 import scipy.misc
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 
 from nets.ColorHandPose3DNetwork import ColorHandPose3DNetwork
 from utils.general import detect_keypoints, trafo_coords, plot_hand, plot_hand_3d
@@ -30,10 +32,10 @@ if __name__ == '__main__':
     # images to be shown
     image_list = list()
     image_list.append('./data/img.png')
-    image_list.append('./data/img2.png')
-    image_list.append('./data/img3.png')
-    image_list.append('./data/img4.png')
-    image_list.append('./data/img5.png')
+    # image_list.append('./data/img2.png')
+    # image_list.append('./data/img3.png')
+    # image_list.append('./data/img4.png')
+    # image_list.append('./data/img5.png')
 
     # network input
     image_tf = tf.placeholder(tf.float32, shape=(1, 240, 320, 3))
