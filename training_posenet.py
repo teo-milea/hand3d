@@ -17,7 +17,7 @@
 #
 from __future__ import print_function, unicode_literals
 
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 import os
 import sys
 
