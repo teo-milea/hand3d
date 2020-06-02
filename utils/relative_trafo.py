@@ -1,5 +1,5 @@
-import tensorflow as tf
 
+import tensorflow.compat.v1 as tf
 
 def _stitch_mat_from_vecs(vector_list):
     """ Stitches a given list of vectors into a 4x4 matrix.

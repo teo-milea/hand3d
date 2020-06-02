@@ -29,7 +29,7 @@ from utils.general import LearningRateScheduler, load_weights_from_snapshot
 train_para = {'lr': [1e-4, 1e-5, 1e-6],
               'lr_iter': [10000, 20000],
               'max_iter': 30000,
-              'show_loss_freq': 1000,
+              'show_loss_freq': 1,
               'snapshot_freq': 5000,
               'snapshot_dir': 'snapshots_posenet'}
 
@@ -73,7 +73,7 @@ saver = tf.train.Saver(max_to_keep=1, keep_checkpoint_every_n_hours=4.0)
 
 rename_dict = {'CPM/PoseNet': 'PoseNet2D',
                '_CPM': ''}
-load_weights_from_snapshot(sess, './weights/cpm-model-mpii', ['PersonNet', 'PoseNet/Mconv', 'conv5_2_CPM'], rename_dict)
+# load_weights_from_snapshot(sess, './weights/cpm-model-mpii', ['PersonNet', 'PoseNet/Mconv', 'conv5_2_CPM'], rename_dict)
 
 # snapshot dir
 if not os.path.exists(train_para['snapshot_dir']):

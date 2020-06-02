@@ -15,8 +15,8 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-import tensorflow as tf
 
+import tensorflow.compat.v1 as tf
 
 def atan2(y, x):
     """ My implementation of atan2 in tensorflow.  Returns in -pi .. pi."""

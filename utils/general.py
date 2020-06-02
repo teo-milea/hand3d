@@ -614,7 +614,7 @@ class EvalUtil:
 
 def load_weights_from_snapshot(session, checkpoint_path, discard_list=None, rename_dict=None):
         """ Loads weights from a snapshot except the ones indicated with discard_list. Others are possibly renamed. """
-        reader = pywrap_tensorflow.NewCheckpointReader(checkpoint_path)
+        reader = tf.train.NewCheckpointReader(checkpoint_path)
         var_to_shape_map = reader.get_variable_to_shape_map()
 
         # Remove everything from the discard list

@@ -18,7 +18,7 @@
 from __future__ import print_function, unicode_literals
 import os
 
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 
 from utils.general import crop_image_from_xy
 from utils.canonical_trafo import canonical_trafo, flip_right_hand
