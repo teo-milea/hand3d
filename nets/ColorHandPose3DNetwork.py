@@ -18,6 +18,10 @@
 from __future__ import print_function, unicode_literals
 import tensorflow.compat.v1 as tf
 import tensorflow
+from tensorflow.python.framework import ops as tf_ops
+from tensorflow.python.ops import array_ops
+
+from tensorflow.python.ops import control_flow_ops
 tf.disable_v2_behavior()
 import os
 
@@ -46,16 +50,51 @@ class ColorHandPose3DNetwork(object):
         import pickle
 
         if weight_files is None:
-            weight_files = ['./weights/handsegnet-rhd.pickle', './weights/posenet3d-rhd-stb-slr-finetuned.pickle']
+            weight_files = ['./data/weights/handsegnet-rhd.pickle', './data/weights/posenet3d-rhd-stb-slr-finetuned.pickle']
+
+        def assign_from_values(weight_dict):
+            feed_dict = {}
+            assigns_ops = []
+
+            for var_name in weight_dict:
+                var_value = weight_dict[var_name]
+                var = tf_ops.get_collection(tf_ops.GraphKeys.GLOBAL_VARIABLES, var_name)
+                if not var:
+                    raise Exception
+                elif len(var) > 1:
+                    found = False
+                    for v in var:
+                        if v.op.name == var_name:
+                            var = v
+                            found = True
+                            break
+                    if not found:
+                        raise Exception
+                else:
+                    var = var[0]
+
+                placeholder_name = 'placeholder/' + var.op.name
+                placeholder_value = array_ops.placeholder(
+                    dtype=var.dtype.base_dtype,
+                    shape=var.get_shape(),
+                    name=placeholder_name)
+                assigns_ops.append(var.assign(placeholder_value))
+
+                feed_dict[placeholder_value] = var_value.reshape(var.get_shape())
+
+            assign_op = control_flow_ops.group(*assigns_ops)
+            return assign_op, feed_dict
 
         # Initialize with weights
         for file_name in weight_files:
+            print(os.getcwd())
             assert os.path.exists(file_name), "File not found."
             with open(file_name, 'rb') as fi:
                 weight_dict = pickle.load(fi)
                 weight_dict = {k: v for k, v in weight_dict.items() if not any([x in k for x in exclude_var_list])}
                 if len(weight_dict) > 0:
-                    init_op, init_feed = tf.contrib.framework.assign_from_values(weight_dict)
+                    print(weight_dict.keys())
+                    init_op, init_feed = assign_from_values(weight_dict)
                     session.run(init_op, init_feed)
                     print('Loaded %d variables from %s' % (len(weight_dict), file_name))
 
