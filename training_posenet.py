@@ -29,7 +29,7 @@ from utils.general import LearningRateScheduler, load_weights_from_snapshot
 train_para = {'lr': [1e-4, 1e-5, 1e-6],
               'lr_iter': [10000, 20000],
               'max_iter': 30000,
-              'show_loss_freq': 1,
+              'show_loss_freq': 1000,
               'snapshot_freq': 5000,
               'snapshot_dir': 'snapshots_posenet'}
 
